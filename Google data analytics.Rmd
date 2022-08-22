@@ -1,0 +1,478 @@
+
+---
+title: "Google Capstone Project Bellabeat Case study"
+author: "Prajjwal Singh"
+date: '2022-07-10'
+output: html_document
+---
+# Bellabeat
+
+### Project Desrciption
+
+This capstone project provides opportunity to individuals to act as a real-world data analyst and perform their role on the given sets of data to answer some key questions related to business environment. I will be following the six-step process taught in the google data analytics certificate program i.e., ask, prepare, process, analyze, share, and act.
+
+### Introduction of the company –
+A high-tech firm called Bellabeat creates smart health products including the Bellabeat app, Leaf, Time, and Spring. Additionally, it provides users with access to a membership program that is based on subscriptions and provides them individualized advice on leading healthy lives. Bellabeat has established itself as a female-focused, tech-driven wellness brand.
+Bellabeat has made significant investments in digital marketing, making use of Google Search and participating in social media. The co-founder Sren is aware that a review of Bellabeat's customer data would highlight further growth prospects.
+
+
+### Scenario of the study
+People use smart gadgets extensively in their daily lives. Bellabeat, a maker of smart devices, may profit from understanding the pattern of smart device usage and developing data-driven business strategies to investigate development potentials. I being the Junior data analyst working on the marketing analyst team at Bellabeat, will be presenting my analysis to the Bellabeat executive team along with your high-level recommendations for Bellabeat’s marketing strategy.
+
+
+### Key stakeholders of the company –
+**1.Urska Srsen**: Bellabeat’s cofounder and Chief Creative Officer.
+
+**2.Sando Mur**: Mathematician and Bellabeat’s co-founder; key member of the Bellabeat executive team.
+
+####Packages Used
+```{r, results='hide'}
+#install.packages("tidyverse")
+#install.packages("skimr")
+#install.packages("janitor")
+#install.packages("dplyr")
+#install.packages("cowplot")
+#install.packages("plotly")
+#install.packages("lubridate")
+#install.packages("ggplot2")
+#install.packages("readr")
+library(tidyverse) #wrangling of data
+library(skimr)     #To get the data summary
+library(janitor)   #To Clean the data.
+library(dplyr)     #To clean the Data.
+library(cowplot)   #To grid the plotted graph
+library(plotly)    #For Plotting Pie Charts
+library(lubridate) #To deal with date attributes
+library(ggplot2)   #To visualize data in different forms.
+library(readr)     #Read and save csv. files
+
+```
+
+
+## Ask Phase
+
+In Ask phase we focus to define what the project would look like and what would qualify as a successful result. Questions that can be answered after skimming through the data and understanding the need of stakeholders are -  
+
+* What are some trends in smart device usage?
+
+* How could these trends help in improving Bellabeat marketing strategy?
+
+* What is our customers behavior while using our product to identify any usage trends or any improvement in the product?
+
+Analysis of the dataset will help us to find the weakness within our product and new functional improvements. This Investigation will also help us to find the trend and gap in the industry. we can apply the trend on Bellabeat products to identify recommendations on functionality and marketing strategies.
+
+## Prepare Phase –
+Prepare phase is all about finding and preparing the right set of data to achieve the successful result. In this case we already have the data. Some of the key characteristics of provided data are –
+
+*	**General description of data -** The data used in this analysis is the Fitbit Fitness Tracker Data. This Kaggle data set contains personal fitness tracker from thirty fitbit users.
+
+*	**Source of Data -** The data set was made available by Mobius stored on Kaggle: https://www.kaggle.com/arashnic/fitbit
+
+*	**Data Files -** The dataset has in total 18 files in .csv format organized in long format.
+
+*	**Reliability of Data -** Thirty eligible Fitbit users consented to the submission of personal tracker data, including minute-level output for physical activity, heart rate, and sleep monitoring.
+
+*	It includes information about daily activity, steps, and heart rate that can be used to explore users’ habits.
+*	**Current -** Data is from March 2016 to May 2016. Data is not current so the users’ habit may be different now.
+
+
+### Limitation of dataset –
+
+* The given dataset contains only 33 users’ data for daily_activity dataset, 24 users for sleep_day and only 8 for weight_log. There are 3 extra users, who did not record their data for tracking daily activity and sleep.
+
+* Only 33 user data is available. The central limit theorem’s general rule of n≥30 applies, and we can use the t test for statistical reference. However, a larger sample size is preferred for the analysis.
+
+* Out of 8-users for weight_log dataset, 5 users manually entered their weight and 3 recorded via a connected Wi-Fi device (e.g.: Wi-Fi scale). There could be errors while inputting the data.
+
+*	Most data are recorded from Tuesday to Thursday, which may not be comprehensive enough to form an accurate analysis.
+
+
+#### ROCCC analysis
+
+**Reliability:** LOW – dataset was collected from 33 individuals only out of which only 8 have provided data for weight_log.
+
+**Originality:** LOW – third party data collect using Amazon Mechanical Turk.
+
+**Comprehensive:** MEDIUM – dataset contains multiple fields on daily activity intensity, calories used, daily steps taken, daily sleep time and weight record.
+
+**Current:** MEDIUM – data is 6-7 years old which could deviate us from our actual result as the habit of people must have due to changes brought by technological advancements.
+
+**Cited:** HIGH – data collector and source is well documented.
+
+#### Data selection
+
+Focus is on daily usage of the Fitbit device as it should provide a high-level insight on the usage pattern of smart devices. Thus, the following files from the dataset has been selected:
+
+1)	dailyActivity_merged.csv
+2)	hourlySteps_merged.csv
+3)	sleepDay_merged.csv
+4)	weightLogInfo_merged.csv
+
+#### Data Loading and structure of data.
+```{r, results='hide'}
+library(readr)
+daily_activity <- read_csv("dailyActivity_merged.csv")
+head(daily_activity)
+
+
+
+
+library(readr)
+hourly_steps <- read_csv("hourlySteps_merged.csv")
+head(hourly_steps)
+
+
+
+
+library(readr)
+sleep_day <- read_csv("sleepDay_merged.csv")
+head(sleep_day)
+
+
+
+library(readr)
+weight_log <- read_csv("weightLogInfo_merged.csv")
+head(weight_log)
+
+
+```
+
+
+
+## Process Phase
+
+The basic task analysts perform in Process phase is to Clean and Organize the data set for analysis.
+
+**Checking and removal of the NA and duplicated values**
+
+```{r, results='hide'}
+#Now we will clean our data by eliminating duplicates and NA values
+sum(is.na(daily_activity))
+sum(is.na(hourly_steps))
+sum(is.na(sleep_day))
+sum(is.na(weight_log)) # weight_log has 65 NA value
+
+sum(duplicated(daily_activity))
+sum(duplicated(hourly_steps))
+sum(duplicated(sleep_day)) #sleep_day had 3 duplicated values.
+sum(duplicated(weight_log))
+
+
+#we will remove duplicates from sleep_day datasheet.We will leave NA values as it is.
+#deletion of duplicated values
+
+sleep_day <- sleep_day[!duplicated(sleep_day), ]
+
+# we will confirm once whether the duplicated values were removed successfully or not.
+
+sum(duplicated(sleep_day)) #zero duplicated values present.
+
+```
+
+
+**For Sleep data:** 3 duplicates were found and removed using “duplicated” function and no NA values were found.
+
+**For Weight data:** 65 “NA” values were found in one column i.e., “Fat column”. I didn’t remove the column because the data can be used in future analysis. Also, no duplicates were found.
+
+**For Daily Activity Dataset:** No duplicates and NA values were found.
+
+
+**Updating the format**
+
+•	I discovered several issues with the time stamp information. I must convert it to date-time format and divide it into date and time before I can analyze it.
+
+•	Added new column for the weekdays.
+
+```{r, results='hide'}
+#Add a new column for the weekdays
+
+daily_activity <- daily_activity %>% 
+  mutate(weekday = weekdays(as.Date(ActivityDate, "%m/%d/%y")))
+view(daily_activity)
+
+
+merged1 <- merge(daily_activity,sleep_day,by = c("Id"), all= TRUE)
+merged_data <- merge(merged1, weight_log, by = c("Id"), all = TRUE)
+view(merged_data)
+sum(duplicated(merged_data)) #Found 93 Duplicates
+sum(is.na(merged_data))
+merged_data <- merged_data[!duplicated(merged_data), ] #Removed duplicates
+sum(duplicated(merged_data)) #Checked again for duplicates
+
+#Orders from Monday to Sunday for plot later
+
+merged_data$weekday <- factor(merged_data$weekday, levels = c("Monday", "Tuesday", 
+                                                              "Wednesday", "Thursday", 
+                                                              "Friday", "Saturday", "Sunday"))
+
+merged_data[order(merged_data$weekday),]
+sum(is.na(merged_data$weekday))
+```
+
+•	Created a new csv. File for accurate analysis (merged_data.csv) by merging daily_activity , sleep_day and weight_log datasheets.
+
+```{r, results='hide'}
+# We have created a merged file and now we will save it for later uses.
+
+write.csv(merged_data, "merged_data.csv")
+n_distinct(merged_data$Id)
+unique(merged_data$Id)
+```
+
+•	Another crucial factor is the regularity with which consumers record their data. The data peak from Sunday to Tuesday, according to the given bar graph. We need to consider how data recording is distributed. Why don't Wednesday to Friday contain as many data records as the other weekdays if they are also working days?
+
+```{r}
+merged_data %>% 
+ggplot(aes(x = weekday, ))+
+  geom_bar(fill = "Orange")+
+  labs(title = "Count of daily recorded data")
+```
+
+ * Total sleeping time for the weekdays plot a comparison that is quite similar to the one above. We can confirm that Sunday to Tuesday is likewise when the majority of sleep data is gathered.
+ 
+```{r}
+ merged_data %>% 
+    drop_na(weekday, TotalMinutesAsleep) %>% 
+    ggplot(aes(x=weekday, y = TotalMinutesAsleep, fill = weekday))+
+    geom_bar (stat = "identity")+
+    labs(title="Total number of hours of sleep", x= "Weekdays",y="Total Minutes Asleep")
+```
+ 
+
+**Because most of the sleep data is gathered between Sunday to Tuesday, these three days have captured more data than any-other days.**
+
+
+
+
+## Analyse & Share Phase
+
+
+
+#### **Summary of our Data set**
+
+```{r}
+daily_activity %>% 
+  select(TotalSteps,TotalDistance, VeryActiveMinutes, FairlyActiveMinutes,
+         LightlyActiveMinutes, SedentaryMinutes, Calories) %>% 
+  summary()
+
+
+sleep_day %>% 
+  select(TotalSleepRecords, TotalMinutesAsleep, TotalTimeInBed) %>% 
+summary()
+
+
+weight_log %>% 
+  select(WeightKg, BMI) %>% 
+  summary()
+##we will not perform the summary operation for merged_data because all data present in merged_data is similar. So, value will remain same.
+```
+
+
+**Comparison of Weekdays with Total steps, Total Calories burnt and Sedentary Minutes**
+
+```{r}
+merged_data %>% 
+  ggplot(aes(x=weekday, y = TotalSteps, fill = weekday))+
+  geom_bar (stat = "identity")+
+  labs(title="Visualization of Most active Day", x= "Weekdays",y="Total Steps")
+  
+
+  merged_data %>% 
+    ggplot(aes(x=weekday, y = Calories, fill = weekday))+
+    geom_bar (stat = "identity")+
+    labs(title="Total Calories burnt for a particular day", x= "Weekdays",y="Total Calories")
+  
+   merged_data %>% 
+    ggplot(aes(x=weekday, y = SedentaryMinutes, fill = weekday))+
+    geom_bar (stat = "identity")+
+    labs(title="Total number of Sedentary Minutes", x= "Weekdays",y="Sedentary Minutes")
+```
+
+
+By Comparing above three graphs we can clearly observe that Sunday is the most active day of the week and Friday being the least active day of the week. Monday and Sunday's data pattern is very similar to each other.In both these days users tend to walk more number of steps, burn more calories and also have high sedentary time than other days.
+
+
+**Relation of Activity level with Sleep Quality**
+ 
+```{r}
+#Comparison between Total Minutes Asleep Vs non Active Minutes
+
+merged_data %>%
+  drop_na(TotalMinutesAsleep) %>% 
+  ggplot(aes(x=SedentaryMinutes, y=TotalMinutesAsleep))+ 
+  geom_point()+
+  stat_smooth(method=lm, se = F)
+  scale_color_gradient(low="red", high="DarkGreen")
+```
+ 
+ 
+ This visualisation shows a comparison between a person's sedentary minutes with their minutes of sleep. We can see that a person spends less time sleeping in bed the more time they spend being inactive. It is a negative relationship, meaning that inactivity has a negative influence on how well you sleep.
+ 
+
+**Relation between BMI and Total Distance covered by user**
+
+ 
+```{r}
+ 
+#BMI VS Total Distance covered by user
+
+
+merged_data %>% 
+  filter(BMI<40) %>% 
+  drop_na(BMI, TotalDistance) %>% 
+  group_by(Id) %>% 
+ggplot(aes(x=TotalDistance, y = BMI))+ 
+  geom_point()+ 
+  stat_smooth(method=lm, se = F)+
+  labs(title="BMI Vs Total Distance covered by Individual")
+```
+ 
+ 
+ The visualization above compares the Total Distance covered by user with  BMI of the users. It shows a relation that a person who has covered a more distance tends to have a lower  BMI.
+ 
+ 
+
+**Relation Between Calories burnt and different levels of Activeness**
+
+
+```{r}
+#Comparison between Active Minutes and calories burnt by the user.
+
+daily_activity %>%
+  filter(VeryActiveMinutes<100) %>% 
+  ggplot(aes(x=VeryActiveMinutes, y=Calories))+ 
+  geom_point()+
+  stat_smooth(method=lm, se= F)
+ 
+
+
+daily_activity %>%
+  filter(FairlyActiveMinutes> 0) %>% 
+  ggplot(aes(x=FairlyActiveMinutes, y=Calories,))+ 
+  geom_point()+
+  stat_smooth(method=lm, se= F)
+  
+ 
+daily_activity %>%
+  ggplot(aes(x=LightlyActiveMinutes, y=Calories,))+ 
+  geom_point()+
+  stat_smooth(method=lm, se= F)
+ 
+
+
+daily_activity %>%
+  ggplot(aes(x=SedentaryMinutes, y=Calories,))+ 
+  geom_point()+
+  stat_smooth(method=lm, se= F)
+```
+
+ 
+ 
+ By observing the above given visualizations we can conclude that, a person who spends more time being active during the day tends to burn more calories than someone who spends more time being inactive.
+ 
+ 
+## Breakdown of Total Active Minutes with the help of pie-chart
+```{r, results='hide'}
+active_users <- daily_activity %>% 
+  filter(FairlyActiveMinutes >= 21.4 | VeryActiveMinutes >= 10.7) %>% 
+  group_by(Id) %>% 
+  count(Id)
+
+total_minutes <- sum(daily_activity$SedentaryMinutes, daily_activity$VeryActiveMinutes,
+                     daily_activity$FairlyActiveMinutes, daily_activity$LightlyActiveMinutes)
+
+sedentary_percentage <- sum(daily_activity$SedentaryMinutes)/total_minutes*100
+lightly_percentage <- sum(daily_activity$LightlyActiveMinutes)/total_minutes*100
+fairly_percentage <- sum(daily_activity$FairlyActiveMinutes)/total_minutes*100
+active_percentage <- sum(daily_activity$VeryActiveMinutes)/total_minutes*100
+```
+
+
+```{r}
+#Pie chart representing percentage of time users activeness.
+percentage <- data.frame(
+  level=c("Sedentary", "Lightly", "Fairly", "Very Active"),
+  minutes=c(sedentary_percentage,lightly_percentage,fairly_percentage,active_percentage))
+
+
+plot_ly(percentage, labels = ~level, values = ~minutes, type = 'pie',textposition = 'outside',
+        textinfo = 'label+percent') %>%
+  layout(title = 'Percentage Classification of Various Active state',
+         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+```
+ 
+The pie chart shows that out of total active minutes users are spending 81.3% of time as a sedentary time and only 1.74% and 1.11% as Very Active and Fairly Active minutes. The American Heart Association and World Health Organization recommend at least 150 minutes of moderate-intensity activity or 75 minutes of vigorous activity, or a combination of both, each week. That means it needs an daily goal of 21.4 minutes of FairlyActiveMinutes or 10.7 minutes of VeryActiveMinutes. Users are no where near the specified data which makes them vulnerable and increases the probability of becoming obese person in the upcoming years.
+
+
+**Relation between different levels of activeness, Calories and Total number of steps**
+
+
+```{r}
+#comparison between Sedentary Active Minutes vs Total steps taken including calories burnt by the user.
+par(mfrow = c(2, 2))
+daily_activity %>%
+ggplot(aes(x=TotalSteps, y=SedentaryMinutes, color=Calories))+ 
+  geom_point()+
+  stat_smooth(method=lm, se= F)+
+  scale_color_gradient(low="red", high = "DarkGreen")+
+  labs(title = "Sedentary Minutes Vs Calories", x = "Total No. of steps")
+
+
+#comparison between Very Active Minutes vs Total steps taken including burnt calories by the user.
+daily_activity %>%
+  filter(VeryActiveMinutes>1) %>% 
+  ggplot(aes(x=TotalSteps, y=VeryActiveMinutes, color=Calories))+ 
+  geom_point()+
+  stat_smooth(method=lm, se= F)+
+  scale_color_gradient(low="red", high = "DarkGreen")+
+labs(title = "Very Active Minutes Vs Calories", x = "Total No. of steps")
+
+#comparison between Fairly Active Minutes vs Total steps taken including burnt calories by the user.
+
+daily_activity %>%
+   filter(FairlyActiveMinutes>1) %>% 
+  ggplot(aes(x=TotalSteps, y=FairlyActiveMinutes, color=Calories))+ 
+  geom_point()+
+  stat_smooth(method=lm, se= F)+
+  scale_color_gradient(low="red", high = "DarkGreen")+
+labs(title = "Fairly Active Minutes Vs Calories", x = "Total No. of steps")
+
+#comparison between Lightly Active Minutes vs Total steps taken including burnt calories by the user.
+
+daily_activity %>%
+  ggplot(aes(x=TotalSteps, y=LightlyActiveMinutes, color=Calories))+ 
+  geom_point()+
+  stat_smooth(method=lm, se= F)+
+  scale_color_gradient(low="red", high = "DarkGreen")+
+labs(title = "Lightly Active Minutes Vs Calories", x = "Total No. of steps")
+```
+
+
+Visualization of above graphs shows that users are burning calories mostly on lightly active minutes and very active minutes as the given line is more steep but in the case of sedentary active minutes line is negatively steep which simply means people burn very less amount of calories while on sedentary active minutes. Also the given sedentary data is skewed as people with high sedentary time are able to burn more calories and walk more than 30000 steps.
+
+
+## Recommendation and Act Phase
+
+According to the investigation' findings,there is a clear trend in non-active people having a negative lifestyle. The connections that our investigation revealed are as follows:
+
+* Very-active minutes and Lightly active minutes has a positive relation to calories burnt.
+
+* User having higher level of activeness tend to experience better sleep quality.
+
+* Users walking more steps are less prone to have a higher BMI.
+
+* Sedentary active minutes make up a significant portion i.e., almost 81% of users daily active minutes. Making daily users more prone to obesity.
+
+
+### Recommendations
+
+* Good Sleep quality being one of the most important factors in having a healthy lifestyle can be promoted by Bellabeat marketing team. Bellabeat can launch a marketing campaign to let their potential customers understand the importance of sleep quality, while promoting their products.
+
+* Users will tend to get annoyed by receiving commands from a machine. SO, bellabeat's products should provide flexibility to their users to adjust the device as per their requirements.
+
+* Bellabeat can add a feature to its app that would inform users who spend a lot of time sitting down. Bellabeat may integrate timely notifications in Leaf/Time to encourage users to get up and walk around more often and cut down on their inactive time.
+
+* Bellabeat Product can have the feature of different zones. On the basis of these zones individual user can be categorised and provide a personal care service from the company. *(zones could be Extremely Danger, Danger, Healthy and Fit)*
+
