@@ -259,18 +259,21 @@ daily_activity %>%
          LightlyActiveMinutes, SedentaryMinutes, Calories) %>% 
   summary()
 
-![1](https://user-images.githubusercontent.com/107001483/185976502-727db876-6ec7-41a1-ad12-88f1216711d4.png)
+![1](https://user-images.githubusercontent.com/107001483/185979464-6b91fa71-2b92-4ed0-b16e-d8b125f63b1e.png)
+
 
 sleep_day %>% 
   select(TotalSleepRecords, TotalMinutesAsleep, TotalTimeInBed) %>% 
 summary()
-![2](https://user-images.githubusercontent.com/107001483/185976531-77ea02ba-efe6-49ac-a3c7-9b23ab535de6.png)
+
+![2](https://user-images.githubusercontent.com/107001483/185979578-abc1ae04-e92f-4ded-be1d-98d293f96907.png)
 
 
 weight_log %>% 
   select(WeightKg, BMI) %>% 
   summary()
-  ![3](https://user-images.githubusercontent.com/107001483/185976638-9c1f9f2d-ebcb-47e7-82c7-80d95876646b.png)
+
+![3](https://user-images.githubusercontent.com/107001483/185979649-1765b6bc-d74d-4049-b44f-ee680e6e9286.png)
 
   
 ##we will not perform the summary operation for merged_data because all data present in merged_data is similar. So, value will remain same.
@@ -284,7 +287,8 @@ merged_data %>%
   ggplot(aes(x=weekday, y = TotalSteps, fill = weekday))+
   geom_bar (stat = "identity")+
   labs(title="Visualization of Most active Day", x= "Weekdays",y="Total Steps")
-  ![Screenshot (1330)](https://user-images.githubusercontent.com/107001483/185976734-65aaa0a2-622a-4523-bb85-7f80021c7682.png)
+  
+![Screenshot (1330)](https://user-images.githubusercontent.com/107001483/185976734-65aaa0a2-622a-4523-bb85-7f80021c7682.png)
 
 
   merged_data %>% 
@@ -292,7 +296,7 @@ merged_data %>%
     geom_bar (stat = "identity")+
     labs(title="Total Calories burnt for a particular day", x= "Weekdays",y="Total Calories")
   
-  ![Screenshot (1331)](https://user-images.githubusercontent.com/107001483/185976810-6a2d03eb-ccd1-49d5-a39b-5b9592def480.png)
+![Screenshot (1331)](https://user-images.githubusercontent.com/107001483/185976810-6a2d03eb-ccd1-49d5-a39b-5b9592def480.png)
 
   
    merged_data %>% 
@@ -360,7 +364,7 @@ daily_activity %>%
   geom_point()+
   stat_smooth(method=lm, se= F)
  
-![BW01 Minutes Vs Calories](https://user-images.githubusercontent.com/107001483/185977196-9e587e01-91f4-40cb-86bf-2048166ce5d4.jpg)
+ ![BW01 Minutes Vs Calories](https://user-images.githubusercontent.com/107001483/185977196-9e587e01-91f4-40cb-86bf-2048166ce5d4.jpg)
 
 
 daily_activity %>%
