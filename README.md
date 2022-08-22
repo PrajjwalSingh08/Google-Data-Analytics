@@ -259,7 +259,7 @@ daily_activity %>%
          LightlyActiveMinutes, SedentaryMinutes, Calories) %>% 
   summary()
 
-![1](https://user-images.githubusercontent.com/107001483/185979464-6b91fa71-2b92-4ed0-b16e-d8b125f63b1e.png)
+![1](https://user-images.githubusercontent.com/107001483/185981386-ee65c433-1233-4c90-bdcd-f32c78dc7cfe.png)
 
 
 sleep_day %>% 
