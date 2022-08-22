@@ -259,21 +259,24 @@ daily_activity %>%
          LightlyActiveMinutes, SedentaryMinutes, Calories) %>% 
   summary()
 
-![1](https://user-images.githubusercontent.com/107001483/185981386-ee65c433-1233-4c90-bdcd-f32c78dc7cfe.png)
+![1](https://user-images.githubusercontent.com/107001483/185984442-ad46091d-bf48-47f2-96de-8e6c628e08e5.png)
+
 
 
 sleep_day %>% 
   select(TotalSleepRecords, TotalMinutesAsleep, TotalTimeInBed) %>% 
 summary()
 
-![2](https://user-images.githubusercontent.com/107001483/185979578-abc1ae04-e92f-4ded-be1d-98d293f96907.png)
+![2](https://user-images.githubusercontent.com/107001483/185984495-a0bbd4fd-96e8-4830-8bea-079292c5b1c2.png)
+
 
 
 weight_log %>% 
   select(WeightKg, BMI) %>% 
   summary()
 
-![3](https://user-images.githubusercontent.com/107001483/185979649-1765b6bc-d74d-4049-b44f-ee680e6e9286.png)
+
+![3](https://user-images.githubusercontent.com/107001483/185984520-65b2097f-16b2-4d3e-845f-afb8d2dbc3e7.png)
 
   
 ##we will not perform the summary operation for merged_data because all data present in merged_data is similar. So, value will remain same.
