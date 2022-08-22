@@ -1,9 +1,8 @@
----
-title: "Google Capstone Project Bellabeat Case study"
-author: "Prajjwal Singh"
-date: '2022-07-10'
-output: html_document
----
+
+# Google Capstone Project Bellabeat Case study
+**By Prajjwal Singh**
+**2022-07-10**
+
 # Bellabeat
 
 ### Project Desrciption
