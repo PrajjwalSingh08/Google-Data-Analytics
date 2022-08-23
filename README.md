@@ -257,29 +257,30 @@ daily_activity %>%
   select(TotalSteps,TotalDistance, VeryActiveMinutes, FairlyActiveMinutes,
          LightlyActiveMinutes, SedentaryMinutes, Calories) %>% 
   summary()
+```
+![1](https://user-images.githubusercontent.com/107001483/186077547-bee5f9d4-f284-4dc9-913d-ae58b98f2f81.png)
 
-![1](https://user-images.githubusercontent.com/107001483/185984442-ad46091d-bf48-47f2-96de-8e6c628e08e5.png)
 
 
-
+```{r}
 sleep_day %>% 
   select(TotalSleepRecords, TotalMinutesAsleep, TotalTimeInBed) %>% 
 summary()
-
+```
 ![2](https://user-images.githubusercontent.com/107001483/185984495-a0bbd4fd-96e8-4830-8bea-079292c5b1c2.png)
 
 
-
+```{r}
 weight_log %>% 
   select(WeightKg, BMI) %>% 
   summary()
+##we will not perform the summary operation for merged_data because all data present in merged_data is similar. So, value will remain same.
 
-
+```
 ![3](https://user-images.githubusercontent.com/107001483/185984520-65b2097f-16b2-4d3e-845f-afb8d2dbc3e7.png)
 
   
-##we will not perform the summary operation for merged_data because all data present in merged_data is similar. So, value will remain same.
-```
+
 
 
 **Comparison of Weekdays with Total steps, Total Calories burnt and Sedentary Minutes**
@@ -289,18 +290,18 @@ merged_data %>%
   ggplot(aes(x=weekday, y = TotalSteps, fill = weekday))+
   geom_bar (stat = "identity")+
   labs(title="Visualization of Most active Day", x= "Weekdays",y="Total Steps")
-  
+  ```
 ![Screenshot (1330)](https://user-images.githubusercontent.com/107001483/185976734-65aaa0a2-622a-4523-bb85-7f80021c7682.png)
 
-
+```{r}
   merged_data %>% 
     ggplot(aes(x=weekday, y = Calories, fill = weekday))+
     geom_bar (stat = "identity")+
     labs(title="Total Calories burnt for a particular day", x= "Weekdays",y="Total Calories")
-  
+  ```
 ![Screenshot (1331)](https://user-images.githubusercontent.com/107001483/185976810-6a2d03eb-ccd1-49d5-a39b-5b9592def480.png)
 
-  
+```{r}
    merged_data %>% 
     ggplot(aes(x=weekday, y = SedentaryMinutes, fill = weekday))+
     geom_bar (stat = "identity")+
@@ -365,27 +366,27 @@ daily_activity %>%
   ggplot(aes(x=VeryActiveMinutes, y=Calories))+ 
   geom_point()+
   stat_smooth(method=lm, se= F)
- 
+ ```
  ![BW01 Minutes Vs Calories](https://user-images.githubusercontent.com/107001483/185977196-9e587e01-91f4-40cb-86bf-2048166ce5d4.jpg)
 
-
+```{r}
 daily_activity %>%
   filter(FairlyActiveMinutes> 0) %>% 
   ggplot(aes(x=FairlyActiveMinutes, y=Calories,))+ 
   geom_point()+
   stat_smooth(method=lm, se= F)
-  
+  ```
 ![BW02 Minutes Vs Calories](https://user-images.githubusercontent.com/107001483/185977236-7431e707-02cd-4ec1-95bd-b150d964575d.jpg)
   
- 
+ ```{r}
 daily_activity %>%
   ggplot(aes(x=LightlyActiveMinutes, y=Calories,))+ 
   geom_point()+
   stat_smooth(method=lm, se= F)
- 
+ ```
 ![BW03 Minutes Vs Calories](https://user-images.githubusercontent.com/107001483/185977286-f354a0bd-b02e-4714-a2b6-a0bb9375ed0e.jpg)
 
-
+```{r}
 daily_activity %>%
   ggplot(aes(x=SedentaryMinutes, y=Calories,))+ 
   geom_point()+
@@ -446,10 +447,10 @@ ggplot(aes(x=TotalSteps, y=SedentaryMinutes, color=Calories))+
   stat_smooth(method=lm, se= F)+
   scale_color_gradient(low="red", high = "DarkGreen")+
   labs(title = "Sedentary Minutes Vs Calories", x = "Total No. of steps")
-
+```
 ![Sedentary Minutes Vs Calories](https://user-images.githubusercontent.com/107001483/185977675-8f477b39-657c-455b-83f0-e38e9ea85599.jpg)
 
-
+```{r}
 #comparison between Very Active Minutes vs Total steps taken including burnt calories by the user.
 daily_activity %>%
   filter(VeryActiveMinutes>1) %>% 
@@ -458,10 +459,10 @@ daily_activity %>%
   stat_smooth(method=lm, se= F)+
   scale_color_gradient(low="red", high = "DarkGreen")+
 labs(title = "Very Active Minutes Vs Calories", x = "Total No. of steps")
-
+```
 ![Very Active Minutes Vs Calories](https://user-images.githubusercontent.com/107001483/185977718-a951f4ad-94f6-4a1d-b6ef-39bc1e764af8.jpg)
 
-
+```{r}
 #comparison between Fairly Active Minutes vs Total steps taken including burnt calories by the user.
 
 daily_activity %>%
@@ -471,10 +472,10 @@ daily_activity %>%
   stat_smooth(method=lm, se= F)+
   scale_color_gradient(low="red", high = "DarkGreen")+
 labs(title = "Fairly Active Minutes Vs Calories", x = "Total No. of steps")
-
+```
 ![Fairly Active Minutes Vs Calories](https://user-images.githubusercontent.com/107001483/185977758-c2506be4-06a6-41ed-af50-cb99f3230354.jpg)
 
-
+```{r}
 #comparison between Lightly Active Minutes vs Total steps taken including burnt calories by the user.
 
 daily_activity %>%
